@@ -6,41 +6,29 @@
     <title>vue</title>
 </head>
 <body>
-
+<!-- 
+    可以变量数组  也可以变量对象  也可以变量字符串但是用的不多
+    v-for="(item,index) in xxx :key="item.id"
+  -->
     <div id="root">
-        <h2>今天的天气{{info}}</h2>
-        <button @click = 'isHot = !sHot'>切换天气</button>
-    </div> 
-    
+        <ul>
+            <li v-for="l in list" :key="l.id" >{{l.name}}--{{l.age}}</li>
+        </ul>
+    </div>
+
     <script src="vue.js"></script>
     <script>
-        const vm = new Vue({
-            el:'#root',
+        new Vue({
+            el:'root',
             data:{
-                isHot:true
-            },
-            computed:{
-                info(){
-                    return this.isHot ? '炎热' : '凉爽' 
-                }
-            },
-            methods:{
-                qhinfo(){
-                    this.isHot = !this.isHot
-                }
-            },
-            // 第一种简写写法
-            watch:{
-                isHot(newValue,oldVaule){
-                    console.log(newValue,oldVaule)
-                    
-                },
+                list:[
+                    {id:'001',name:'张三',age:18},
+                    {id:'002',name:'张三1',age:40},
+                    {id:'003',name:'张三2',age:34}
+                ]
             }
         })
-        // 第二种简写写法  不允许写成箭头函数，会造成this指向有问题
-        vm.$watch('isHot',function(){
-            console.log(newValue,oldVaule)
-        })
     </script>
+
 </body>
 </html>
