@@ -19,6 +19,7 @@
     object.defineProperty方法  object.defineProperty(对象名称，'属性名称',{value:18})  然后在输入一下对象  对象里面你刚刚添加的属性名称是不能被枚举的意思是不参与遍历的  object.keys(对象名称)这个方法的意思是 keys()这个里面要传入一个对象作为一个参数 可以把这个对象里面所有属性的属性名称提取出来  变成一个数组 但是如果使用的defineProperty进行添加到这个keys()里面的话，是获取不到了，这个就是枚举  也可以使用for进行验证   如果想要遍历的话在object.defineProperty(对象名称，'属性名称',{value:18,enumerable:true}) 就可以了。如果在对象里面直接写入属性名称 在控制台里面是可以修改的 如果使用的是object.defineProperty(对象名称，'属性名称',{value:18，enumerable:true}) 的话 是修改不了的  如果想修改的话  在添加一个参数为 object.defineProperty(对象名称，'属性名称',{value:18，enumerable:true,writable:true}) 就可以在控制台中进行修改了 例如 对象名称.属性名称 = 19 如果想删掉的话正常的在控制台中输入  delete 对象名称.属性名称  就可以删掉了  如果使用的是defineProperty(对象名称，'属性名称',{value:18，enumerable:true,writable:true})这种方式进行添加的属性  是无法通过  delete 对象名称.属性名称  进行删除的 如果想要给他删除的话 加入属性为 defineProperty(对象名称，'属性名称',{value:18，enumerable:true,writable:true，configurable:true})  就可以删除了
 
     数据代理  意思是a对象里面有一个属性为x  b对象里面有个属性为y  想让d对象能操作a对象里面的一个属性为x，赋值，获取，修改
+    ```
     let a = {x:100}
        let b = {y:200}
        Object.defineProperty(b,'x',{
@@ -29,9 +30,50 @@
             a.x = value
         }
        })
+    ```
     具体实现与上面的步骤。
 
     vue中的数据代理 vue中  如果想在控制台中输入data这个属性的话   在代码中使用一个变量去接受它  然后在进行输入为  const vm = new vue({......})  然后在控制台中输入vm._data回车
+
+### 下面是一些练习的东西
+   ```
+    name:'你好'
+    hello {{name}}
+
+    `<h1>`插值语法`</h1>`
+    `<h3>`你好  {{name}}`</h3>`
+    `<hr>`
+    `<h1>`指令语法`</h1>`
+    `<a :href="url.toUpperCase()">`点我去百度`</a>`
+    `<a :href="school.name">`点我去百度`</a>`
+
+    单向数据绑定`<input type="text" v-bind:value="name">`
+    `<!-- 双向数据绑定  <input type="text" v-model:value="name"> -->`
+    双向数据绑定的简写方式  `<input type="text" v-model="name">`
+    new Vue({
+        el:'#root',
+        data:{
+            name:'test'
+        }
+    })
+
+    new Vue({
+        el:'#root',
+        data(){
+            return{
+                name:'cxd'
+            }
+        }
+       })`<div id="root">`
+     `<h1>`你好  {{name}}`</h1>`
+    `</div>`
+
+    let person = {
+            name:'张三',
+            sex:'男'
+        }
+   ```
+
 
 ### 事件处理   
     使用v-on:xxx或者是@xxx绑定事件 其中xxx是事件名称  事件的回调需要配置在methods对象中，最终会在vm上面  methods中的配置函数，不要用箭头函数 否则this就不是vue了  而是win   @click = 'demo'和@click = 'demo(参数1,$event)'  效果是一样的 但是后者可以传递参数。
@@ -74,7 +116,8 @@
 ### 计算属性
     在双向绑定的到时候 要求是 在输入框中输入的数字和在其他标签显示的数字一样的时候，要求其他标签显示的位置只显示指定的位数 使用的方式1：data里面的数据名称.slice(0,3) 的意思是只获取这个数据的前三位 例如下面的代码
 
-<div id="root">
+    ```
+    <div id="root">
         姓: <input type="text" v-model="namex"><br><br>
         名:<input type="text" v-model="namem"><br><br>
         <span>全名：{{namex.slice(0,3) + '-' + namem}}</span>
@@ -89,10 +132,10 @@
             }
         })
     </script>
-
+    ```
     如果想要精简这个大括号里面的表达式的书写方式  使用方法的方式进行精简插值语法 例如下面的代码  可能需要调整一下缩进 使用方法的方式进行展示
-
-<div id="root">
+    ```
+    <div id="root">
         姓: <input type="text" v-model="namex"><br><br>
         名:<input type="text" v-model="namem"><br><br>
         <span>全名：{{namexm()}}</span>
@@ -112,11 +155,12 @@
             }
         })
     </script>
-
+    ```
     还有一种方式进行精简上面两种代码  使用计算属性的方式进行书写 计算属性的原理，定义：要用的属性是不存在的，要通过属性计算得来的 底层借助了object.defineproperty方法的getter和setter  get函数什么时候执行：1.初次读取的时候会执行一次。2.当依赖的数据发生变化的时候会再次被调用。优势和methods相比，内部有缓存机制，可以复用，效率更高，调试方便 。  计算属性最终会在Vm里面展示，可以执行读取和使用   如果计算属性被修改了，必须写上set函数去响应修改，且set中要引起计算时依赖的数据发生变化。解释一下在控制台中去修改vm里面的属性的时候  例如vm.namex = '什么什么' 点击回车  页面的属性同步发生变化。
     展示下面代码：
 
-<div id="root">
+    ```
+    <div id="root">
         姓: <input type="text" v-model="namex"><br><br>
         名:<input type="text" v-model="namem"><br><br>
         <span>全名：{{namexm}}</span>
@@ -146,6 +190,7 @@
             }
         })
     </script>
+    ```
 
     计算属性简写方式  这种的简写方式只考虑读取不考虑修改的时候(只考虑获取不考虑读取的到时候)  使用的是这种简写方式 代码为：
     computed:{
@@ -398,42 +443,164 @@
     如果在标签中单独写一个v-else 意思是如果上面的if里面的条件都不成立的话，执行v-else里面的东西。但是有一点 v-if和v-esle-if(v-elif) 是一个整体不能打断如果打断了，后面的代码就没有用了。  还有一个标签显示template 如果使用这个标签里面在进行包裹其他的标签在运行的话，F12里面是不显示这个标签的，而且这个标签只能和v-if进行使用。  
 
 ### 列表渲染
+    v-for 具体代码在vue.html里面展示  使用index作为key和使用id作为key的区别(在页面中使用index作为key在页面中添加到列表的最后一条数据的时候 是没有什么太大的问题，但是如果index作为key来使用并且在列表中的插入第一条数据的时候会出现问题，列表配合input能展示出问题所在，如果使用id作为key的话并且在列表中插入第一条数据的时候，就不会出问题) 表示如果使用index作为key可能会引起的问题是：若对数据进行：逆向添加，逆序删除等破坏顺序操作，会产生没有必要的真实DOM更新 ==> 界面效果没有问题，但是效率低。如果结果中还包含输入类的DOM会产生错误DOM更新 ==> 界面有问题  
+
+    如果没有指定key的话 vue默认给你使用的是index
     
+    在开发中如何使用key：
+        1.最好使用每条数据的唯一标识作为key，例如id，手机号，身份证号，学号等唯一值。
+        2.如果不存在对数据的逆序添加，逆序删除等破坏顺序操作，仅用于渲染列表用于展示，使用index作为key是没有问题的
+    使用index作为key
 
-### 下面是一些练习的东西
+    ```
+    <div id="root">
+        <button @click="add">添加一条数据</button>
+        <ul>
+            <li v-for="(l,index) in list" :key="index" >
+                {{l.name}}--{{l.age}}
+                <input type="text">
+            </li>
+        </ul>
+    </div>
 
-    name:'你好'
-    hello {{name}}
+    <script src="vue.js"></script>
+    <script>
+        new Vue({
+            el:'#root',
+            data:{
+                list:[
+                    {id:'001',name:'张三0',age:18},
+                    {id:'002',name:'张三1',age:40},
+                    {id:'003',name:'张三2',age:34}
+                ]
+            },
+            methods: {
+                add(){
+                    const add1 = {id:'004',name:'张三3',age:50}
+                    this.list.unshift(add1)
+                }
+            },
+        })
+    </script>
+    ```
 
-    `<h1>`插值语法`</h1>`
-    `<h3>`你好  {{name}}`</h3>`
-    `<hr>`
-    `<h1>`指令语法`</h1>`
-    `<a :href="url.toUpperCase()">`点我去百度`</a>`
-    `<a :href="school.name">`点我去百度`</a>`
+    使用id作为key
 
-    单向数据绑定`<input type="text" v-bind:value="name">`
-    `<!-- 双向数据绑定  <input type="text" v-model:value="name"> -->`
-    双向数据绑定的简写方式  `<input type="text" v-model="name">`
+    ```
+     <div id="root">
+        <button @click="add">添加一条数据</button>
+        <ul>
+            <li v-for="(l,index) in list" :key="l.id" >
+                {{l.name}}--{{l.age}}
+                <input type="text">
+            </li>
+        </ul>
+    </div>
+
+    <script src="vue.js"></script>
+    <script>
+        new Vue({
+            el:'#root',
+            data:{
+                list:[
+                    {id:'001',name:'张三0',age:18},
+                    {id:'002',name:'张三1',age:40},
+                    {id:'003',name:'张三2',age:34}
+                ]
+            },
+            methods: {
+                add(){
+                    const add1 = {id:'004',name:'张三3',age:50}
+                    this.list.unshift(add1)
+                }
+            },
+        })
+    </script>
+    ```
+
+### 列表过滤 (下面的代码展示 如果监视属性和计算属性都能实现的情况下 优先使用计算属性)
+    使用监听属性实现的：
+    ```
+      <div id="root">
+        <h2>数据筛选</h2>
+        <input type="text" placeholder="请输入姓名" v-model="keyname">
+        <ul>
+            <li v-for="(l,index) in flist" :key="l.id">
+                {{l.name}}------{{l.age}}------{{l.sex}}
+            </li>
+        </ul>
+    </div>
+
+    <script src="vue.js"></script>
+    <script>
+    Vue.config.productionTip = false
+    
     new Vue({
         el:'#root',
         data:{
-            name:'test'
-        }
-    })
-
-    new Vue({
-        el:'#root',
-        data(){
-            return{
-                name:'cxd'
+            keyname:'',
+            list:[
+                {id:'001',name:'谭松韵',age:'20',sex:'女'},
+                {id:'002',name:'布吉岛',age:'23',sex:'女'},
+                {id:'003',name:'沈腾1',age:'24',sex:'男'},
+                {id:'004',name:'复航2',age:'24',sex:'男'}
+            ],
+            flist:[]
+        },
+        watch:{
+            // keyname(val){
+            //     this.flist = this.list.filter((l)=>{
+            //         return l.name.indexOf(val) !== -1
+            //     })
+            // }
+            keyname:{
+                immediate:true,
+                handler(val){
+                     this.flist = this.list.filter((l)=>{
+                     return l.name.indexOf(val) !== -1
+                 })
+                }
             }
         }
-       })`<div id="root">`
-     `<h1>`你好  {{name}}`</h1>`
-    `</div>`
+    })
+    </script>
+    ```
+    使用计算属性实现的：
+    ```
+     <div id="root">
+        <h2>数据筛选</h2>
+        <input type="text" placeholder="请输入姓名" v-model="keyname">
+        <ul>
+            <li v-for="(l,index) in lists" :key="l.id">
+                {{l.name}}------{{l.age}}------{{l.sex}}
+            </li>
+        </ul>
+    </div>
 
-    let person = {
-            name:'张三',
-            sex:'男'
+    <script src="vue.js"></script>
+    <script>
+    Vue.config.productionTip = false
+    
+    new Vue({
+        el:'#root',
+        data:{
+            keyname:'',
+            list:[
+                {id:'001',name:'谭松韵',age:'20',sex:'女'},
+                {id:'002',name:'布吉岛',age:'23',sex:'女'},
+                {id:'003',name:'沈腾1',age:'24',sex:'男'},
+                {id:'004',name:'复航2',age:'24',sex:'男'}
+            ]
+        },
+        computed:{
+            lists(){
+                return this.list.filter((l)=>{
+                    return l.name.indexOf(this.keyname) !== -1
+                })
+            }
         }
+    })
+    </script>
+    ```
+### 列表排序
+    

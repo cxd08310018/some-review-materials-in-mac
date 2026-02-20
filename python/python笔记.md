@@ -118,8 +118,27 @@ AGE = 23
         2级会员礼物为：专业跑鞋
         3级会员礼物为：运动耳机
 
+### 循环 
+    文字加密和解密的效果
+    # 加密文字代码：
+text = input('请输入要加密的文字：')
+se  = ''
+for t in text:
+    se += chr(ord(t) + 1)
+print(f'加密后的文字为：{se}')
 
+    # 解密文字代码：
+se = input('请输入要加密的文字：')
+text  = ''
+for s in se:
+    text += chr(ord(s) - 1)
+print(f'加密后的文字为：{text}')
 
+### while和for循环的区别：
+[alt text](image/image.png)
+
+### countinue 和break 区别 
+    略过！！！！！
 
 
 

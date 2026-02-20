@@ -6,28 +6,40 @@
     <title>vue</title>
 </head>
 <body>
-<!-- 
-    可以变量数组  也可以变量对象  也可以变量字符串但是用的不多
-    v-for="(item,index) in xxx :key="item.id"
-  -->
+
     <div id="root">
+        <h2>数据筛选</h2>
+        <input type="text" placeholder="请输入姓名" v-model="keyname">
         <ul>
-            <li v-for="l in list" :key="l.id" >{{l.name}}--{{l.age}}</li>
+            <li v-for="(l,index) in lists" :key="l.id">
+                {{l.name}}------{{l.age}}------{{l.sex}}
+            </li>
         </ul>
     </div>
 
     <script src="vue.js"></script>
     <script>
-        new Vue({
-            el:'root',
-            data:{
-                list:[
-                    {id:'001',name:'张三',age:18},
-                    {id:'002',name:'张三1',age:40},
-                    {id:'003',name:'张三2',age:34}
-                ]
+    Vue.config.productionTip = false
+    
+    new Vue({
+        el:'#root',
+        data:{
+            keyname:'',
+            list:[
+                {id:'001',name:'谭松韵',age:'20',sex:'女'},
+                {id:'002',name:'布吉岛',age:'23',sex:'女'},
+                {id:'003',name:'沈腾1',age:'24',sex:'男'},
+                {id:'004',name:'复航2',age:'24',sex:'男'}
+            ]
+        },
+        computed:{
+            lists(){
+                return this.list.filter((l)=>{
+                    return l.name.indexOf(this.keyname) !== -1
+                })
             }
-        })
+        }
+    })
     </script>
 
 </body>
