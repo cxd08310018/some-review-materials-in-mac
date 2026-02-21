@@ -603,4 +603,88 @@
     </script>
     ```
 ### 列表排序
+    使用方式为：
+        ```
+    <div id="root">
+        <h2>数据筛选</h2>
+        <input type="text" placeholder="请输入姓名" v-model="keyname">
+        <button @click="sortType = 2">年龄升序</button>
+        <button @click="sortType = 1">年龄降序</button>
+        <button @click="sortType = 0">原顺序</button>
+        <ul>
+            <li v-for="(l,index) in lists" :key="l.id">
+                {{l.name}}------{{l.age}}------{{l.sex}}
+            </li>
+        </ul>
+    </div>
+
+    <script src="vue.js"></script>
+    <script>
+    Vue.config.productionTip = false
     
+    new Vue({
+        el:'#root',
+        data:{
+            keyname:'',
+            sortType:0,
+            list:[
+                {id:'001',name:'谭松韵',age:'10',sex:'女'},
+                {id:'002',name:'布吉岛',age:'43',sex:'女'},
+                {id:'003',name:'沈腾1',age:'20',sex:'男'},
+                {id:'004',name:'复航2',age:'9',sex:'男'}
+            ]
+        },
+        computed:{
+            lists(){
+                const arr =  this.list.filter((l)=>{
+                    return l.name.indexOf(this.keyname) !== -1
+                })
+                if (this.sortType){
+                    arr.sort((a,b)=>{
+                        return this.sortType === 1 ? b.age - a.age : a.age - b.age
+                    })
+                }
+                return arr
+            }
+        }
+    })
+    </script>
+        ```
+
+vue默认的监视 下面代码演示vue监视不到的地方  例如 下面的代码是运行之后在页面上是看不到修改的  
+```
+    <div id="root">
+        <button click="updateShen"></button>
+        <ul>
+            <li v-for="(l,index) in list" :key="l.id">
+                {{l.name}}------{{l.age}}------{{l.sex}}
+            </li>
+        </ul>
+    </div>
+
+    <script src="vue.js"></script>
+    <script>
+    Vue.config.productionTip = false
+    
+    new Vue({
+        el:'#root',
+        data:{
+            list:[
+                {id:'001',name:'谭松韵',age:'10',sex:'女'},
+                {id:'002',name:'布吉岛',age:'43',sex:'女'},
+                {id:'003',name:'沈腾1',age:'20',sex:'男'},
+                {id:'004',name:'复航2',age:'9',sex:'男'}
+            ]
+        },
+        methods: {
+            updateShen(){
+                hits.list[0].name = 'xxx' //是可以修改的但是下面的代码是无法修改的
+                this.list[0] = {id:'001',name:'谭松韵22',age:'2220',sex:'女111'}
+            }
+        },
+        
+    })
+    </script>
+```
+
+

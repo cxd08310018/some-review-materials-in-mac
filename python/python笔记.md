@@ -121,18 +121,20 @@ AGE = 23
 ### 循环 
     文字加密和解密的效果
     # 加密文字代码：
-text = input('请输入要加密的文字：')
-se  = ''
-for t in text:
-    se += chr(ord(t) + 1)
-print(f'加密后的文字为：{se}')
+    ```
+    text = input('请输入要加密的文字：')
+    se  = ''
+    for t in text:
+        se += chr(ord(t) + 1)
+    print(f'加密后的文字为：{se}')
 
     # 解密文字代码：
-se = input('请输入要加密的文字：')
-text  = ''
-for s in se:
-    text += chr(ord(s) - 1)
-print(f'加密后的文字为：{text}')
+    se = input('请输入要加密的文字：')
+    text  = ''
+    for s in se:
+        text += chr(ord(s) - 1)
+    print(f'加密后的文字为：{text}')
+    ```
 
 ### while和for循环的区别：
 [alt text](image/image.png)
@@ -140,7 +142,40 @@ print(f'加密后的文字为：{text}')
 ### countinue 和break 区别 
     略过！！！！！
 
+### 函数
 
+位置参数的使用
+def fun(num,num1):
+    print(f'您点的是：{num}份{num1}')
+fun(1,'aaa')
+
+函数关键字参数
+    def fun(num,num1):
+        print(f'测试{num},{num1}')
+fun(num='',num1='')
+
+位置参数和关键字参数区别在于后者是不区分位置的！！例如 fun(num1='',num='') 都可以执行  但是前者不行！！！！  也可以使用位置参数和位置参数混着使用但是前提条件是 位置参数必须在关键字参数的前面。
+
+限制传参方式  /和*的区别在与 这个/前面只能使用位置参数，，*后面只能用关键字参数 例如：def fun(name,/,age,*,name1,name2)  fun('张三',23,name1='',name2='')  前提是/必须写在*的前面   也可以设置默认操作  但是默认参数必须写在必选参数的后面 例如 def fun(name,name='',(之后面写的形参都要写上默认值))
+python给print()函数设置的默认值不使用是出不来的。
+
+函数中的可变参数  定义参数的时候，在形参名称前面加上*，可以接受任何数量的位置参数，并打包成一个元组；def fun(*args) 这个里面的args只是一个形参名称，可以随意修改  args中存放的：函数调用时候，所传入的所有位置的实参  args的数据类型是元组  例如  def fun(*args) fun('a','a','b') args = a,a,b  元组
+定义函数的时候，在形参名前面加上**kwargs 可以接受任意数量的关键字参数，并打包成一个字典  和上面的args的使用方式一样的 区别在于 args接受的是value，而kwargs接收的key和value，args和kwargs是可以同时使用的，但是必须先写args   args和kwargs也能和其他类型的参数一起使用 
+    例如：
+    def fun(a,b,*args,c='name',**kwargs) :
+        print(a)
+        print(b)
+        print(args)
+        print(c)
+        print(kwargs)
+    fun('a','b','抽烟','喝酒',c='测试',age=18,he=20)
+
+特殊的字面量 none  意思是现在不知道某一个变量它的具体类型是什么 就可以使用次类型 例如  name = none  如果使用none转换为布尔值的话，初始值是false none不能参与数学运算 同时也不能与字符串拼接  如果不给函数设置返回值，函数默认是none。  
+
+
+函数返回值：自己去学习谢谢 提示print函数是没有返回值的。
+
+函数中的全局作用域和局部作用域  自己去学习谢谢！！
 
 
 
