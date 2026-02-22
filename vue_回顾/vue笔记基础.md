@@ -18,6 +18,7 @@
 
     object.defineProperty方法  object.defineProperty(对象名称，'属性名称',{value:18})  然后在输入一下对象  对象里面你刚刚添加的属性名称是不能被枚举的意思是不参与遍历的  object.keys(对象名称)这个方法的意思是 keys()这个里面要传入一个对象作为一个参数 可以把这个对象里面所有属性的属性名称提取出来  变成一个数组 但是如果使用的defineProperty进行添加到这个keys()里面的话，是获取不到了，这个就是枚举  也可以使用for进行验证   如果想要遍历的话在object.defineProperty(对象名称，'属性名称',{value:18,enumerable:true}) 就可以了。如果在对象里面直接写入属性名称 在控制台里面是可以修改的 如果使用的是object.defineProperty(对象名称，'属性名称',{value:18，enumerable:true}) 的话 是修改不了的  如果想修改的话  在添加一个参数为 object.defineProperty(对象名称，'属性名称',{value:18，enumerable:true,writable:true}) 就可以在控制台中进行修改了 例如 对象名称.属性名称 = 19 如果想删掉的话正常的在控制台中输入  delete 对象名称.属性名称  就可以删掉了  如果使用的是defineProperty(对象名称，'属性名称',{value:18，enumerable:true,writable:true})这种方式进行添加的属性  是无法通过  delete 对象名称.属性名称  进行删除的 如果想要给他删除的话 加入属性为 defineProperty(对象名称，'属性名称',{value:18，enumerable:true,writable:true，configurable:true})  就可以删除了
 
+
     数据代理  意思是a对象里面有一个属性为x  b对象里面有个属性为y  想让d对象能操作a对象里面的一个属性为x，赋值，获取，修改
     ```
     let a = {x:100}
@@ -678,12 +679,97 @@ vue默认的监视 下面代码演示vue监视不到的地方  例如 下面的�
         },
         methods: {
             updateShen(){
-                hits.list[0].name = 'xxx' //是可以修改的但是下面的代码是无法修改的
+                hits.list[0].name = 'xxx' //是可以修改的但是下面的代码是无法修改的（指定是在F12里面的控制台上面能拿到数据  但是 vue开发者工具里面是不显示的）
                 this.list[0] = {id:'001',name:'谭松韵22',age:'2220',sex:'女111'}
+                //如果想要上面的代码生效 使用下面的代码进行实现：
+                this.list.splice(0,1,{id:'001',name:'谭松韵22',age:'2220',sex:'女111'})
             }
         },
         
     })
+    </script>
+```
+Vue.set的方法使用  这个方法的意思是，当你写着写着  觉得某一个属性需要添加到里面了，但是现在data有太多的属性了，就怕乱了，就可以使用此方法，在页面中加个button  配置方法 方法里面写入 Vue.set(this.对象名称,'属性名称','属性值')  在标签中配置上面v-if = "对象名称.属性名称" 就可以实现了  也可以使用this.$set(this.对象名称,'属性名称','属性值');  但是这个方法只能对data里面的某一个对象进行追加属性 不能给data追加属性 。
+
+vue中如果想要修改数组里面的数据  修改方式为  (js中原数组的修改方式为  push,pop,shift,unshift,splice,sort,reverse)  vue中也调用前面的这些对应的数组函数就可以进行修改，添加，删除，排序，等等。  也可以使用上面的方法进行修改  Vue.set(。。。。。)进行修改也是一样的。
+
+对于上面的内容进行练习：
+
+```
+    <div id="root">
+        
+        <h1>学生信息</h1>
+        <button @click="student.age++">年龄+1</button><br>
+        <button @click="addsex">添加性别属性，默认值为：男</button><br>
+        <button @click="addFr">在列表首位添加一个朋友</button><br>
+        <button @click="updatename">修改第一个朋友的名称为：张三</button><br>
+        <button @click="addah">添加一个爱好</button><br>
+        <button @click="updateai1">修改第一个爱好为：开车</button><br>
+        <button @click="updateai2">过滤掉爱好中的抽烟</button><br>
+
+        <h3>姓名:{{student.name}}</h3>
+        <h3>年龄:{{student.age}}</h3>
+        <h3 v-if="student.sex">性别：{{student.sex}}</h3>
+        <h3>爱好:</h3>
+        <ul>
+            <li v-for="(h,index) in student.hobby" :key="index">
+                {{h}}
+            </li>
+        </ul>
+        <h3>朋友们</h3>
+        <ul>
+            <li v-for="(f,index) in student.friends" :key="index">
+                {{f.name}} -- {{f.age}}
+            </li>
+        </ul>
+    </div>
+
+    <script src="vue.js"></script>
+    <script>
+    Vue.config.productionTip = false
+
+    new Vue({
+        el:'#root',
+        data:{
+            student:{
+                name:'tom',
+                age:18,
+                hobby:['抽烟','喝酒','烫头'],
+                friends:[
+                    {name:'jer',age:35},
+                    {name:'ton',age:45}
+                ]
+            }
+        },
+        methods:{
+            addsex(){//下面的两行代码都可以
+                // Vue.set(this.student,'sex','男')
+                this.$set(this.student,'sex','男')
+            },
+            addFr(){
+                this.student.friends.unshift({name:'添加测试',age:80})
+            },
+            updatename(){
+                this.student.friends[0].name = '张三'
+                this.student.friends[0].age = 23
+            },
+            addah(){
+                this.student.hobby.push('布吉岛')
+            },
+            updateai1(){
+                // this.student.hobby.splice(0,1,'开车')
+                // Vue.set(this.student.hobby,0,'开车')
+                this.$set(this.student.hobby,0,'开车')
+            },
+            //过滤
+            updateai2(){
+                this.student.hobby = this.student.hobby.filter((h)=>{
+                    return h !== '抽烟'
+                })
+            }
+        }
+    })
+
     </script>
 ```
 

@@ -130,5 +130,71 @@
 #         break
 # if ip:
 #     print('恭喜您！全部通过！！')
+# 使用递归求阶乘
+# def f(num):
+#     '''测试自动提示'''
+#     if num == 0:
+#         return 1
+#     else:
+#         return num * f( num - 1 )
+    
+# re = f(5)
 
 
+
+
+def calc_total(*nums):
+    '''计算总运动量(个)  nums（元组）可变参数'''
+    return sum(nums)
+
+def calc_avg(total,days=7):
+    """计算平均值"""
+    return total / days
+
+def check_success(total,goal=120):
+    '''判定本次挑战是否成功'''
+    if total >= goal:
+        return '挑战成功！'
+    else:
+        return '挑战失败！'
+    
+
+
+def main(title,duration,goal):
+    print(f'{title}{duration}天挑战赛（请输入每天的数量）')
+    num1 = int(input('第一天：'))
+    num2 = int(input('第二天：'))
+    num3 = int(input('第三天：'))
+    #运动总量
+    total = calc_total(num1,num2,num3);
+    #计算平均值
+    avg = calc_avg(total,duration)
+    # 判断挑战是否成功
+    res = check_success(total,goal)
+    print(f'{title}{duration}健身总结')
+    # print('总数是：%d,平均值是：%.1f' %(total,avg))
+    print(f'总数是：{total},平均值是：{avg:.1f}' )
+    print(res)
+main('仰卧起坐',3,40)
+
+
+# def main(title,duration):
+#     print(f'{title}{duration}天挑战赛（请输入每天的数量）')
+#     num1 = int(input('第一天：'))
+#     num2 = int(input('第二天：'))
+#     num3 = int(input('第三天：'))
+#     num4 = int(input('第四天：'))
+#     num5 = int(input('第五天：'))
+#     num6 = int(input('第六天：'))
+#     num7 = int(input('第七天：'))
+#     #运动总量
+#     total = calc_total(num1,num2,num3,num4,num5,num6,num7);
+#     #计算平均值
+#     avg = calc_avg(total)
+#     # 判断挑战是否成功
+#     res = check_success(total)
+#     print(f'{title}{duration}健身总结')
+#     # print('总数是：%d,平均值是：%.1f' %(total,avg))
+#     print(f'总数是：{total},平均值是：{avg:.1f}' )
+#     print(res)
+# main('俯卧撑',7)
