@@ -567,7 +567,7 @@
     </script>
     ```
     使用计算属性实现的：
-    ```
+```
      <div id="root">
         <h2>数据筛选</h2>
         <input type="text" placeholder="请输入姓名" v-model="keyname">
@@ -602,10 +602,11 @@
         }
     })
     </script>
-    ```
+```
+
 ### 列表排序
     使用方式为：
-        ```
+```
     <div id="root">
         <h2>数据筛选</h2>
         <input type="text" placeholder="请输入姓名" v-model="keyname">
@@ -650,7 +651,7 @@
         }
     })
     </script>
-        ```
+```
 
 vue默认的监视 下面代码演示vue监视不到的地方  例如 下面的代码是运行之后在页面上是看不到修改的  
 ```
@@ -772,5 +773,145 @@ vue中如果想要修改数组里面的数据  修改方式为  (js中原数组�
 
     </script>
 ```
+
+### 收集表单数据  v-model:
+在vue中设置form表单的时候注意的事项：
+    如果input type=text 则v-model收集的是value值，用户输入的也是value值
+    如果input type=radio 则v-model收集的value值，且要给标签配置value值
+    如果input type=checkbox  :
+        1.没有配置input的value属性，那么收集的是checkbox（勾选 or 未勾选，是布尔值）
+        2.配置input的value属性：
+            1.v-model的初始值是非数组，那么收集的是checkbox（勾选 or 未勾选，是布尔值）
+            2.v-model的初始值是数组，那么收集的就是value组成的数组
+    备注：v-model的是三个修饰符：
+        lazy：失去焦点在收集数据。
+        number:输入字符串转为有效数字
+        trim：输入首尾空格过滤。
+下面是具体的代码：
+```
+    <div id="root">
+        <form @submit.prevent="demo">
+            <!-- <label for="demo">账号: </label>
+            <input type="text" id="demo"> -->
+            账号: <input type="text" v-model.trim="userinfo.account"> <br><br>
+            秘密: <input type="password" v-model="userinfo.password"><br><br>
+            年龄: <input type="number" v-model.number="userinfo.age"> <br><br>
+            性别: 
+            <input type="radio" name="sex" v-model="userinfo.sex" value="男">男
+            <input type="radio" name="sex" v-model="userinfo.sex" value="女">女
+            <br><br>
+            爱好：
+            学习 <input type="checkbox" v-model="userinfo.hobby" value="学习">
+            打游戏 <input type="checkbox" v-model="userinfo.hobby" value="打游戏">
+            吃饭 <input type="checkbox" v-model="userinfo.hobby" value="吃饭">
+            <br><br>
+            所属校区：
+            <select v-model="userinfo.city">
+                <option value="">请选择校区</option>
+                <option value="bj">北京</option>
+                <option value="sh">上海</option>
+                <option value="sz">深圳</option>
+                <option value="wh">武汉</option>
+            </select>
+            <br><br>
+            其他信息：
+            <textarea v-model.lazy="userinfo.other"></textarea>
+            <br><br>
+            <input type="checkbox" v-model="userinfo.agree">阅读并接受 <a href="www.baidu.com">《用户协议》</a>
+            <button>提交</button>
+        </form>
+    </div>
+
+    <script src="vue.js"></script>
+    <script>
+    Vue.config.productionTip = false
+    new Vue({
+        el:'root',
+        data:{
+            userinfo:{
+                account:'',
+                password:'',
+                sex:'男',
+                hobby:[],
+                city:'bj',
+                other:'',
+                agree:'',
+                age:''
+            }
+        },
+        methods: {
+            demo(){
+                console.log(JSON.stringify(this.userinfo));
+                
+            }
+        },
+    })
+    </script>
+```
+
+### 过滤器  不是必须要用的东西，也可以使用计算属性进行实现
+这个Vue中的过滤器只能配合用于v-bind和插值语法的使用，（配置管道符号进行使用  |  ），如果使用v-model会报错
+先试用计算属性进行实现：
+```
+    <div id="root">
+        <h2>显示格式化后的时间</h2>
+        <!-- 计算属性实现 -->
+        <!-- <h3>现在显示效果{{fmtTime}}</h3> -->
+        <!-- 方法实现 -->
+        <!-- <h3>现在显示效果{{getfmtTime()}}</h3> -->
+        <!-- 过滤实现 -->
+        <h3>现在显示效果{{time | time111}}</h3>
+        <!-- 也可以传递参数 -->
+        <h3>现在显示效果{{time | time111('YYYY_MM_DD')}}</h3>
+        <!-- 多个过滤器可以串联 -->
+        <h3>现在显示效果{{time | time111('YYYY_MM_DD') | mytimes}}</h3>
+        
+
+
+    </div>
+
+
+    <!-- <div id="root1">
+        这个对应的是下面的有四个点的new Vue({})里面的东西，可以写两个
+    </div> -->
+
+    <script src="vue.js"></script>
+    <script src="days.js"></script>
+    <script>
+    Vue.config.productionTip = false
+    Vue.filter('mytimes',function(value){
+        return value.slice(0,4)
+    })
+    new Vue({
+        el:'#root',
+        data:{
+            time:'1771911899963'
+        },
+        //下面的代码是局部的过滤器，如果再来一个vue实例的话，是用不了的。
+        filters:{
+            time111(value,str='YYYY年MM月DD日 HH:mm:ss'){
+                return value.format(str)
+            }
+        }
+        // methods: {
+        //     getfmtTime(){
+        //         return dayjs(this.time).format('YYYY年MM月DD日 HH:mm:ss')
+        //     }
+        // },
+        // computed:{
+        //     fmtTime(){
+        //         return dayjs(this.time).format('YYYY年MM月DD日 HH:mm:ss')
+        //     }
+        // }
+    })
+
+    // new Vue({
+    //     .... 
+    // })
+
+    </script>
+```
+
+
 
 

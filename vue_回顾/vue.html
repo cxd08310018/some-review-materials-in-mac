@@ -8,77 +8,60 @@
 <body>
 
     <div id="root">
+        <h2>显示格式化后的时间</h2>
+        <!-- 计算属性实现 -->
+        <!-- <h3>现在显示效果{{fmtTime}}</h3> -->
+        <!-- 方法实现 -->
+        <!-- <h3>现在显示效果{{getfmtTime()}}</h3> -->
+        <!-- 过滤实现 -->
+        <h3>现在显示效果{{time | time111}}</h3>
+        <!-- 也可以传递参数 -->
+        <h3>现在显示效果{{time | time111('YYYY_MM_DD')}}</h3>
+        <!-- 多个过滤器可以串联 -->
+        <h3>现在显示效果{{time | time111('YYYY_MM_DD') | mytimes}}</h3>
         
-        <h1>学生信息</h1>
-        <button @click="student.age++">年龄+1</button><br>
-        <button @click="addsex">添加性别属性，默认值为：男</button><br>
-        <button @click="addFr">在列表首位添加一个朋友</button><br>
-        <button @click="updatename">修改第一个朋友的名称为：张三</button><br>
-        <button @click="addah">添加一个爱好</button><br>
-        <button @click="updateai1">修改第一个爱好为：开车</button><br>
-        <button @click="updateai2">过滤掉爱好中的抽烟</button><br>
 
-        <h3>姓名:{{student.name}}</h3>
-        <h3>年龄:{{student.age}}</h3>
-        <h3 v-if="student.sex">性别：{{student.sex}}</h3>
-        <h3>爱好:</h3>
-        <ul>
-            <li v-for="(h,index) in student.hobby" :key="index">
-                {{h}}
-            </li>
-        </ul>
-        <h3>朋友们</h3>
-        <ul>
-            <li v-for="(f,index) in student.friends" :key="index">
-                {{f.name}} -- {{f.age}}
-            </li>
-        </ul>
+
     </div>
 
+
+    <!-- <div id="root1">
+        这个对应的是下面的有四个点的new Vue({})里面的东西，可以写两个
+    </div> -->
+
     <script src="vue.js"></script>
+    <script src="days.js"></script>
     <script>
     Vue.config.productionTip = false
-
+    Vue.filter('mytimes',function(value){
+        return value.slice(0,4)
+    })
     new Vue({
         el:'#root',
         data:{
-            student:{
-                name:'tom',
-                age:18,
-                hobby:['抽烟','喝酒','烫头'],
-                friends:[
-                    {name:'jer',age:35},
-                    {name:'ton',age:45}
-                ]
-            }
+            time:'1771911899963'
         },
-        methods:{
-            addsex(){//下面的两行代码都可以
-                // Vue.set(this.student,'sex','男')
-                this.$set(this.student,'sex','男')
-            },
-            addFr(){
-                this.student.friends.unshift({name:'添加测试',age:80})
-            },
-            updatename(){
-                this.student.friends[0].name = '张三'
-                this.student.friends[0].age = 23
-            },
-            addah(){
-                this.student.hobby.push('布吉岛')
-            },
-            updateai1(){
-                // this.student.hobby.splice(0,1,'开车')
-                // Vue.set(this.student.hobby,0,'开车')
-                this.$set(this.student.hobby,0,'开车')
-            },
-            updateai2(){
-                this.student.hobby = this.student.hobby.filter((h)=>{
-                    return h !== '抽烟'
-                })
+        //下面的代码是局部的过滤器，如果再来一个vue实例的话，是用不了的。
+        filters:{
+            time111(value,str='YYYY年MM月DD日 HH:mm:ss'){
+                return value.format(str)
             }
         }
+        // methods: {
+        //     getfmtTime(){
+        //         return dayjs(this.time).format('YYYY年MM月DD日 HH:mm:ss')
+        //     }
+        // },
+        // computed:{
+        //     fmtTime(){
+        //         return dayjs(this.time).format('YYYY年MM月DD日 HH:mm:ss')
+        //     }
+        // }
     })
+
+    // new Vue({
+    //     .... 
+    // })
 
     </script>
 

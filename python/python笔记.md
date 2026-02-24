@@ -251,4 +251,54 @@ main('仰卧起坐',3,40)
 
 ### 数据容器：
 
+list 列表  定义list空列表的时候方式有两种一种是:list1 = []  和list2 = list()都是空列表  列表中也可以定义列表  例如：list = [1,2,[4,5]]
+list 中的下标自己去复习  
+list 中的增删改查  create delete update read   
+增加元素：在列表后面添加一个元素 list.append(元素)  在指定的下标处去添加一个元素  例如  list.insert(下标，元素)  也可以批量添加到list中，意思是在list后面进行批量追加 例如  list.extend([元素]) -> list = [1,2,3,4] list.extend([10,2,3,4])  print(list)在列表中也可以添加字符串 例如   list = [1,2,3,4] list.extend('测试一下')  print(list)
+删除指定元素(只有pop有返回值，其他的均没有返回值)：list.pop(下标) 指定下标进行删除，删除完成之后也可以返回刚刚删除的值 例如前面的代码可以使用变量接收一下并且输出 a = list.pop(下标) print(a)也可以不接收  也可以传递指定的value进行删除(意思是删除list中第一次出现的value) 例如 list.remove(value)  删除所有参数例如：list.clear()  删除指定下标的元素(没有返回值)：del list[下标]。
+修改指定元素 list[下标] = newvalue 
+查询指定元素 list[下标]
+
+list的常用方法 查找指定元素在列表中的下标 a = list.index(value) print(a) 返回的是下标  统计某个元素在列表中出现的次数 例如 a = list.count(值) print(a) 翻转列表：list.reverse()，无返回值  对列表进行排序(默认是从小到大)list.sort(reverse=true/false)(如果列表中都是数字，则按照数字的大小进行排序)，无返回值，如果把里面的false修改成true输出之后是从大到小 查找方法值是对第一层列表进行查询不会在列表中的列表进行查询例如 list = [1,2,3,4,[4,5,6]]  上面的代码，index，count,都是不能查到里面的列表的。如果列表中有数字也有字符串的话，运行代码会报错。如果列表中都是字符串的话，则按照Unicode编码进行排序，第一个字符识别的编码进行排列。
+
+内置函数 sorted(数据容器，reverse=布尔值)对容器进行排列，从小到大不会改变原容器的  true和false   len(数据容器) 获取元素中容器的个数 max(数据容器) min(数据容器)有返回值  sum(数据容器)，次函数不能使用字符串，只能是数值类型。
+
+列表的循环遍历  list while循环遍历 index = 0 while index < len(list): print(list[index]) index += 1   list for循环遍历 写法一：for item in list: print(item) 写法二：for index in range(len(list)): print(list[index])  写法三(同时获取下标和value)： for index,item in enumerate(list，start = 5)：print(index,item) 其中里面的start是开始循环的时候，编号的其实位置，前面的代码是等于5 意思是index从下标5开始。
+
+列表练习：
+print('请输入学生成绩，输入结束停止录入')
+sc_list = []
+
+while True:
+    data = input('请输入成绩：')
+    if data == '结束':
+        break
+    else:
+        sc_list.append(int(data))
+if sc_list:
+    avg = sum(sc_list) / len(sc_list)
+    pa_count = 0
+    e_count = 0
+    for item in sc_list:
+        if item >= 60:
+            pa_count += 1
+        if item >= 90:
+            e_count += 1
+    pa_ra = pa_count / len(sc_list) * 100
+    ex_ra = e_count / len(sc_list) * 100
+    print('统计信息如下')
+    print(f'总人数：{len(sc_list)}')
+    print(f'最高分为：{max(sc_list)}')
+    print(f'最低分为：{min(sc_list)}')
+    print(f'合格人数：{pa_count}人')
+    print(f'合格率为：{pa_ra:.1f}%')
+    print(f'优秀人数:{e_count}人')
+    print(f'优秀率为：{ex_ra:.1f}%')
+    print(f'平均分数：{avg:.1f}')
+else:
+    print('没有输入任何成绩')
+
+list特点：可以存放不同的元素，元素是有序的存储（正索引，负索引），可以重复，允许修改，长度不固定，最常用的数据容器
+
+
 
