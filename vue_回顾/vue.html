@@ -4,12 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>vue</title>
+    
 </head>
 <body>
 
     <div id="root">
-        <h3 v-text="name"></h3>
-        <h3 v-html="name"></h3>
+        <h2 v-once>初始化的n值是{{n}}</h2>
+        <h2>当前的n值是{{n}}</h2>
+        <button @click="n++">点我n+1</button>
     </div>
 
     <script src="vue.js"></script>
@@ -18,8 +20,7 @@
     new Vue({
         el:'',
         data:{
-            name:'测试工程师所描述的',
-            str:'<h2>这种方式不要用在用户提交上面</h2>'
+            n:1
         }
     })    
 
