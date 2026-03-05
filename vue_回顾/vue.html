@@ -9,9 +9,11 @@
 <body>
 
     <div id="root">
-        <h2 v-once>初始化的n值是{{n}}</h2>
-        <h2>当前的n值是{{n}}</h2>
-        <button @click="n++">点我n+1</button>
+        <h2>当前的n值是：<span v-text="n"></span></h2>
+        <h2>放到10倍的n值是：<span v-cxd="n"></span></h2>
+        <button click="n++"></button>
+        <hr>
+        <input type="text" v-cbind:value="n">
     </div>
 
     <script src="vue.js"></script>
@@ -21,6 +23,23 @@
         el:'',
         data:{
             n:1
+        },
+        directives:{
+            cxd(el,bd){
+                el.innerText = bd.value * 10
+            },
+            cbind:{
+                //指令与元素绑定成功的时候
+                big(el,bd){
+                    el.value = bd.value
+                },
+                inserted(el,bd){
+                    el.focus()
+                },
+                update(el,bd){
+                    el.value = bd.value
+                }
+            }
         }
     })    
 
