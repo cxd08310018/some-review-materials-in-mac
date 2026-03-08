@@ -9,40 +9,24 @@
 <body>
 
     <div id="root">
-        <h2>当前的n值是：<span v-text="n"></span></h2>
-        <h2>放到10倍的n值是：<span v-cxd="n"></span></h2>
-        <button click="n++"></button>
-        <hr>
-        <input type="text" v-cbind:value="n">
+        <h2>当前的n值是{{n}}</h2>
+        <button click="add">n+1</button>
     </div>
 
     <script src="vue.js"></script>
     <script src="days.js"></script>
     <script>
-    new Vue({
-        el:'',
-        data:{
-            n:1
-        },
-        directives:{
-            cxd(el,bd){
-                el.innerText = bd.value * 10
+        new Vue({
+            el:'#root',
+            data:{
+                n:1
             },
-            cbind:{
-                //指令与元素绑定成功的时候
-                big(el,bd){
-                    el.value = bd.value
-                },
-                inserted(el,bd){
-                    el.focus()
-                },
-                update(el,bd){
-                    el.value = bd.value
-                }
-            }
-        }
-    })    
-
+            methods: {
+                add(){
+                    this.n++
+                }                
+            },
+        })
     </script>
 
 </body>

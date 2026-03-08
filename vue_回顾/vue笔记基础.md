@@ -203,6 +203,7 @@
 ### 监视属性
     创建案例 使用案例里面的效果进行实现功能 有很多种写法  第一种写法三元表达式
 
+```
 <div id="root">
         <h2>今天的天气{{isHot ? '炎热' : '凉爽'}}</h2>
         <button>切换天气</button>
@@ -216,10 +217,10 @@
                 isHot:true
             }
         })
-</script>
-
-    第二种写法 使用计算属性进行展示
-
+</script>  
+```
+第二种写法 使用计算属性进行展示
+```
 <div id="root">
         <h2>今天的天气{{info}}</h2>
         <button @click = 'qhinfo'>切换天气</button>
@@ -245,10 +246,12 @@
             
         })
     </script>
+```
 
     第三种写法在事件当中直接进行修改 如果你代码中写的事件只做一件事情的话 可以这么写  但是如果做的事情比较多的话  这么写有点长 需要和计算属性进行配合  computed和methods 这两个属性进行配合使用  如果实现点击切换天气弹窗的换  如果直接在click=‘在这个里面去写的话，会报错’ 例如  click = 'alert(1)'控制台会报错 x做了一个累加的操作。
     绑定事件的时候：@xxx = 'yyy' 这个yyy可以写一些简单的语句。
 
+```
 <div id="root">
         <h2>今天的天气{{info}},{{x}}</h2>
         <button @click = 'isHot = !sHot;x++'>切换天气</button>
@@ -275,9 +278,11 @@
             
         })
     </script>
+```
 
     监视属性的写法  watch 能监视正常属性 也能监视计算属性 watch的两种写法  什么时候使用这两种写法 这两种写法的使用场景  第一种如果你很明确知道我要监视谁的话，使用第一种   如果你开始不知道监视谁，后续才知道我要监视它，使用第二种写法方式。下面代码展示为：
 
+```
 <div id="root">
         <h2>今天的天气{{info}}</h2>
         <button @click = 'isHot = !sHot'>切换天气</button>
@@ -323,10 +328,12 @@
             }
         })
     </script>
+```
 
 ### 深度监视
     vue中的watch默认不监视对象内部值的改变(一层)  如果在watch中配置deep:true就可以检测对象内部值的变化  但是vue自身也能监测到对象内部的变化 但是vue中的watch默认是不开启的  使用watch的时候根据数据的具体结构，在进行决定是否采用这个深度监视。下面是深度监视的具体代码：主要的是numbers东西的变化
 
+```
 <div id="root">
         <h2>今天的天气{{info}}</h2>
         <button @click = 'isHot = !sHot'>切换天气</button>
@@ -382,10 +389,11 @@
 
         })
     </script>
+```
 
 ### 监视属性简写的形式和写法
     如果你要使用immediate或者是deep的时候 就不能简写  如果不使用的情况下  代码简写形式为：
-
+```
 <div id="root">
         <h2>今天的天气{{info}}</h2>
         <button @click = 'isHot = !sHot'>切换天气</button>
@@ -421,6 +429,7 @@
             console.log(newValue,oldVaule)
         })
     </script>
+```
 
 ### 计算属性和监视属性的区别
     官网上显示的是，前者要比后者使用的更加流畅；  如果需求是当官网里面的姓发生变化的时候，姓名延迟一秒在发生变化，如果是这种情况的话，使用后者比较好。在指定的属性方法里面添加settimeout(()=>{要执行的操作},1000) 意思是等一秒钟在执行里面具体代码的操作。 后者是可以开启异步任务 但是前者是不行的。具体实现为：
@@ -1089,6 +1098,65 @@ Vue.directives('cbind',{
     }
 })
 ```
+
+# vue的声明周期
+透明度慢慢的消失
+第一种写法：
+```
+ <div id="root">
+       <h2 :style="{opacity}">测试用例的展示信息</h2>
+    </div>
+
+    <script src="vue.js"></script>
+    <script src="days.js"></script>
+    <script>
+    
+    const vm = new Vue({
+        el:'#root',
+        data:{
+            opacity:1
+        }
+    })
+    setInterval(() => {
+        vm.opacity -= 0.01
+        if(vm.opacity <= 0) vm.opacity = 1
+    }, 16);
+
+    </script>
+```
+第二种写法：
+```
+<div id="root">
+       <h2 :style="{opacity}">测试用例的展示信息</h2>
+    </div>
+
+    <script src="vue.js"></script>
+    <script src="days.js"></script>
+    <script>
+    
+    const vm = new Vue({
+        el:'#root',
+        data:{
+            opacity:1
+        },
+        //vue完成模版的解释并把初始值的真实DOM元素放入页面（挂载完毕）调用mounted
+        mounted() {
+            setInterval(()=>{
+                this.opacity -= 0.1
+                if (this.opacity <= 0) this.opacity = 1
+            },16)
+        },
+    })
+    // setInterval(() => {
+    //     vm.opacity -= 0.01
+    //     if(vm.opacity <= 0) vm.opacity = 1
+    // }, 16);
+
+    </script>
+```
+
+
+
 
 
 
